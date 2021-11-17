@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <input type="search" v-model="userInput" />
-    <button>Search</button>
+    <button @click="submitSearch()">Search</button>
     <ul>
       <li v-for="(movie, i) in movieCall()" :key="i">{{ movie.title }}</li>
     </ul>
@@ -20,6 +20,7 @@ export default {
       apiUrl: "https://api.themoviedb.org/3",
       movies: [],
       userInput: "",
+      test: "",
     };
   },
 
@@ -29,7 +30,7 @@ export default {
         .get(`${this.apiUrl}/search/movie`, {
           params: {
             api_key: this.apiKey,
-            query: this.userInput, //collega con v-model, è il titolo del fim
+            query: this.test, //collega con v-model, è il titolo del fim
             languages: "en",
           },
         })
@@ -37,6 +38,10 @@ export default {
           this.movies = resp.data.results;
         });
       return this.movies;
+    },
+    submitSearch() {
+      this.test = this.userInput;
+      return this.test;
     },
   },
   computed: {},
