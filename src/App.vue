@@ -1,9 +1,16 @@
 <template>
   <div id="app">
     <input type="search" v-model="userInput" />
-    <button @click="submitSearch()">Search</button>
+    <button @click="movieCall">Search</button>
     <ul>
-      <li v-for="(movie, i) in movieCall()" :key="i">{{ movie.title }}</li>
+      <li v-for="(movie, i) in movies" :key="i">
+        <ul class="lista_film pb-5">
+          <li>{{ movie.title }}</li>
+          <li>{{ movie.original_title }}</li>
+          <li>{{ movie.original_language }}</li>
+          <li>{{ movie.vote_average }}</li>
+        </ul>
+      </li>
     </ul>
   </div>
 </template>
@@ -20,28 +27,25 @@ export default {
       apiUrl: "https://api.themoviedb.org/3",
       movies: [],
       userInput: "",
-      test: "",
     };
   },
 
   methods: {
     movieCall() {
+      if (!this.userInput) {
+        return;
+      }
       axios
         .get(`${this.apiUrl}/search/movie`, {
           params: {
             api_key: this.apiKey,
-            query: this.test, //collega con v-model, è il titolo del fim
+            query: this.userInput, //collega con v-model, è il titolo del fim
             languages: "en",
           },
         })
         .then((resp) => {
           this.movies = resp.data.results;
         });
-      return this.movies;
-    },
-    submitSearch() {
-      this.test = this.userInput;
-      return this.test;
     },
   },
   computed: {},
@@ -49,6 +53,8 @@ export default {
 </script>
 
 <style lang="scss">
+@import "~bootstrap/scss/bootstrap";
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -56,5 +62,8 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+  /* .lista_film {
+    padding-bottom: 20px;
+  } */
 }
 </style>
