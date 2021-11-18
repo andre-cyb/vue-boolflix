@@ -19,7 +19,7 @@
             <i
               class="fa fa-star"
               aria-hidden="true"
-              v-for="(star, i) in vote(movie)"
+              v-for="(star, i) in voteFunction(movie)"
               :key="i"
             ></i>
             <i
@@ -42,19 +42,20 @@
             <div>
               <img :src="lang[serie.original_language]" width="30px" alt="" />
             </div>
-
-            <i
-              class="fa fa-star"
-              aria-hidden="true"
-              v-for="(star, i) in vote(serie)"
-              :key="i"
-            ></i>
-            <i
-              class="fa fa-star-o"
-              aria-hidden="true"
-              v-for="(star, i) in starEmpty(serie)"
-              :key="i"
-            ></i>
+            <span
+              >Voto:<i
+                class="fa fa-star"
+                aria-hidden="true"
+                v-for="(star, i) in voteFunction(serie)"
+                :key="i"
+              ></i>
+              <i
+                class="fa fa-star-o"
+                aria-hidden="true"
+                v-for="(star, i) in starEmpty(serie)"
+                :key="i"
+              ></i
+            ></span>
           </div>
         </li>
       </ul>
@@ -112,12 +113,12 @@ export default {
       let idThumb = type.poster_path;
       return urlContent + "w185" + idThumb;
     },
-    vote(type) {
+    voteFunction(type) {
       let vote = type.vote_average / 2;
       return Math.ceil(vote);
     },
     starEmpty(type) {
-      return 5 - this.vote(type);
+      return 5 - this.voteFunction(type);
     },
   },
   mounted() {},
