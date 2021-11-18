@@ -4,30 +4,61 @@
     <button @click="movieCall(`movie`, `movies`), movieCall(`tv`, `series`)">
       Search
     </button>
-    <ul>
-      <li v-for="(movie, i) in movies" :key="i">
-        <ul class="lista_film pb-5">
-          <li>
-            <strong>{{ movie.title }}</strong>
-          </li>
-          <li>{{ movie.original_title }}</li>
-          <li>{{ lang[movie.original_language] }}</li>
-          <li>{{ movie.vote_average }}</li>
-        </ul>
-      </li>
-    </ul>
-    <ul>
-      <li v-for="(serie, i) in series" :key="i">
-        <ul class="lista_film pb-5">
-          <li>
-            <strong>{{ serie.name }}</strong>
-          </li>
-          <li>{{ serie.original_name }}</li>
-          <li>{{ lang[serie.original_language] }}</li>
-          <li>{{ serie.vote_average }}</li>
-        </ul>
-      </li>
-    </ul>
+    <div class="row">
+      <ul>
+        <li v-for="movie in movies" :key="movie.id">
+          <div class="lista_film pb-5">
+            <img :src="thumb(movie)" alt="" />
+            <h3>
+              {{ movie.title }}
+            </h3>
+            <div>{{ movie.original_title }}</div>
+            <div>
+              <img :src="lang[movie.original_language]" width="30px" alt="" />
+            </div>
+            <i
+              class="fa fa-star"
+              aria-hidden="true"
+              v-for="(star, i) in vote(movie)"
+              :key="i"
+            ></i>
+            <i
+              class="fa fa-star-o"
+              aria-hidden="true"
+              v-for="(star, i) in starEmpty(movie)"
+              :key="i"
+            ></i>
+          </div>
+        </li>
+      </ul>
+      <ul>
+        <li v-for="serie in series" :key="serie.id">
+          <div class="lista_film pb-5">
+            <img :src="thumb(serie)" alt="" />
+            <h3>
+              {{ serie.name }}
+            </h3>
+            <div>{{ serie.original_name }}</div>
+            <div>
+              <img :src="lang[serie.original_language]" width="30px" alt="" />
+            </div>
+
+            <i
+              class="fa fa-star"
+              aria-hidden="true"
+              v-for="(star, i) in vote(serie)"
+              :key="i"
+            ></i>
+            <i
+              class="fa fa-star-o"
+              aria-hidden="true"
+              v-for="(star, i) in starEmpty(serie)"
+              :key="i"
+            ></i>
+          </div>
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 
@@ -47,10 +78,10 @@ export default {
 
       userInput: "",
       lang: {
-        it: "bandiera italiana",
-        en: "bandiera inglese",
-        fr: "bandiera francese",
-        de: "bandiera tedesca",
+        it: require("@/assets/it.svg"),
+        en: require("@/assets/gb.svg"),
+        fr: require("@/assets/fr.svg"),
+        de: require("@/assets/de.svg"),
       },
     };
   },
@@ -73,6 +104,21 @@ export default {
         });
     },
     thumbnailCall() {},
+    flag(lang) {
+      return this.lang[lang];
+    },
+    thumb(type) {
+      let urlContent = "https://image.tmdb.org/t/p/";
+      let idThumb = type.poster_path;
+      return urlContent + "w185" + idThumb;
+    },
+    vote(type) {
+      let vote = type.vote_average / 2;
+      return Math.ceil(vote);
+    },
+    starEmpty(type) {
+      return 5 - this.vote(type);
+    },
   },
   mounted() {},
 };
@@ -80,6 +126,7 @@ export default {
 
 <style lang="scss">
 @import "~bootstrap/scss/bootstrap";
+@import "~font-awesome/css/font-awesome.css";
 
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
@@ -88,5 +135,12 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+  ul {
+    list-style: none;
+    width: 50%;
+    li {
+      list-style: none;
+    }
+  }
 }
 </style>
