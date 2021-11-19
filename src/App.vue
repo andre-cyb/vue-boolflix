@@ -34,58 +34,88 @@
       <h1 class="p-2 fw-bold" v-if="this.movies.length > 0">MOVIE</h1>
       <ul>
         <li v-for="movie in movies" :key="movie.id">
-          <div class="lista_film pb-5">
+          <div class="lista_film mb-5 position-relative">
             <img class="thumbnail" :src="thumb(movie)" alt="" />
-            <h3>
-              {{ movie.title }}
-            </h3>
-            <div>{{ movie.original_title }}</div>
-            <div>
-              <img :src="lang[movie.original_language]" width="30px" alt="" />
+            <div class="overlay">
+              <h3>
+                {{ movie.title }}
+              </h3>
+              <div
+                :style="
+                  movie.title === movie.original_title
+                    ? `display: none`
+                    : `display: block`
+                "
+              >
+                {{ movie.original_title }}
+              </div>
+              <div>
+                <img
+                  class="m-2"
+                  :src="lang[movie.original_language]"
+                  width="30px"
+                  alt=""
+                />
+              </div>
+              <span
+                >Voto:<i
+                  class="fa fa-star"
+                  aria-hidden="true"
+                  v-for="(star, i) in voteFunction(movie)"
+                  :key="i"
+                ></i>
+                <i
+                  class="fa fa-star-o"
+                  aria-hidden="true"
+                  v-for="(star, i) in starEmpty(movie)"
+                  :key="i + 'stella-vuota'"
+                ></i>
+              </span>
             </div>
-            <span
-              >Voto:<i
-                class="fa fa-star"
-                aria-hidden="true"
-                v-for="(star, i) in voteFunction(movie)"
-                :key="i"
-              ></i>
-              <i
-                class="fa fa-star-o"
-                aria-hidden="true"
-                v-for="(star, i) in starEmpty(movie)"
-                :key="i + 'stella-vuota'"
-              ></i>
-            </span>
           </div>
         </li>
       </ul>
       <h1 class="p-2 fw-bold" v-if="this.series.length > 0">TV SERIES</h1>
       <ul>
         <li v-for="serie in series" :key="serie.id">
-          <div class="lista_film pb-5">
-            <img :src="thumb(serie)" alt="" />
-            <h3>
-              {{ serie.name }}
-            </h3>
-            <div>{{ serie.original_name }}</div>
-            <div>
-              <img :src="lang[serie.original_language]" width="30px" alt="" />
+          <div class="lista_film mb-5 position-relative">
+            <img class="thumbnail" :src="thumb(serie)" alt="" />
+            <div class="overlay">
+              <h3>
+                {{ serie.name }}
+              </h3>
+              <div
+                :style="
+                  serie.name === serie.original_name
+                    ? `display: none`
+                    : `display: block`
+                "
+              >
+                {{ serie.original_name }}
+              </div>
+              <div>
+                <img
+                  class="m-2"
+                  :src="lang[serie.original_language]"
+                  width="30px"
+                  alt=""
+                />
+              </div>
+              <span
+                >Voto:<i
+                  class="fa fa-star"
+                  aria-hidden="true"
+                  v-for="(star, i) in voteFunction(serie)"
+                  :key="i + 'stella-piena'"
+                ></i>
+                <i
+                  class="fa fa-star-o"
+                  aria-hidden="true"
+                  v-for="(star, i) in starEmpty(serie)"
+                  :key="i + 'stella_vuota'"
+                ></i
+              ></span>
             </div>
-            <span
-              >Voto:<i
-                class="fa fa-star"
-                aria-hidden="true"
-                v-for="(star, i) in voteFunction(serie)"
-                :key="i + 'stella-piena'"
-              ></i>
-              <i
-                class="fa fa-star-o"
-                aria-hidden="true"
-                v-for="(star, i) in starEmpty(serie)"
-                :key="i + 'stella_vuota'"
-              ></i
-            ></span>
           </div>
         </li>
       </ul>
@@ -142,7 +172,7 @@ export default {
       let urlContent = "https://image.tmdb.org/t/p/";
       let idThumb = type.poster_path;
       if (!idThumb) {
-        urlContent = require("@/assets/no-image.png");
+        urlContent = require("@/assets/No_picture_available.png");
         return urlContent;
       }
 
@@ -210,6 +240,22 @@ export default {
       .thumbnail {
         height: 513px;
         object-fit: cover;
+      }
+      .overlay {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        bottom: 0;
+        opacity: 0;
+        padding: 60px;
+        background-color: rgba(0, 0, 0, 0.836);
+        transition: all 0.2s linear;
+      }
+      &:hover {
+        .overlay {
+          opacity: 1;
+        }
       }
     }
   }
