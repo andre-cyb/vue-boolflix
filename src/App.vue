@@ -26,14 +26,21 @@
     </nav>
 
     <div class="row">
-      <!-- <FilmCard
-        v-for="movie in movies"
-        :key="movie.id"
-        :data="movies"
-      ></FilmCard> -->
-      <h1 class="p-2 fw-bold" v-if="this.movies.length > 0">MOVIE</h1>
       <ul>
-        <li v-for="movie in movies" :key="movie.id">
+        <h1 class="p-2 fw-bold" v-if="this.movies.length > 0">MOVIE</h1>
+        <h1 class="fw-bold" style="font-size: 50px; padding-right: 60%" v-else>
+          Scopri nuovi contenuti, tutti a portata di click!
+        </h1>
+        <FilmCard
+          v-for="movie in movies"
+          :key="movie.id"
+          :titolo="movie.title"
+          :titolo_originale="movie.original_title"
+          :lingua_originale="movie.original_language"
+          :type="movie"
+          :trama="movie.overview"
+        ></FilmCard>
+        <!-- <li v-for="movie in movies" :key="movie.id">
           <div class="lista_film mb-5 position-relative">
             <img class="thumbnail" :src="thumb(movie)" alt="" />
             <div class="overlay">
@@ -73,11 +80,20 @@
               </span>
             </div>
           </div>
-        </li>
+        </li> -->
       </ul>
-      <h1 class="p-2 fw-bold" v-if="this.series.length > 0">TV SERIES</h1>
       <ul>
-        <li v-for="serie in series" :key="serie.id">
+        <h1 class="p-2 fw-bold" v-if="this.series.length > 0">TV SERIES</h1>
+        <FilmCard
+          v-for="serie in series"
+          :key="serie.id"
+          :titolo="serie.name"
+          :titolo_originale="serie.original_name"
+          :lingua_originale="serie.original_language"
+          :type="serie"
+          :trama="serie.overview"
+        ></FilmCard>
+        <!-- <li v-for="serie in series" :key="serie.id">
           <div class="lista_film mb-5 position-relative">
             <img class="thumbnail" :src="thumb(serie)" alt="" />
             <div class="overlay">
@@ -117,7 +133,7 @@
               ></span>
             </div>
           </div>
-        </li>
+        </li> -->
       </ul>
     </div>
   </div>
@@ -125,11 +141,11 @@
 
 <script>
 import axios from "axios";
-/* import FilmCard from "@/components/FilmCard.vue";
- */
+import FilmCard from "@/components/FilmCard.vue";
+
 export default {
   name: "App",
-  components: {},
+  components: { FilmCard },
   data() {
     return {
       apiKey: "1fef8132a8e5f3adf9eced61ab7c59c8",
@@ -185,6 +201,9 @@ export default {
     starEmpty(type) {
       return 5 - this.voteFunction(type);
     },
+    /* titleOrName() {
+      this;
+    }, */
   },
   computed: {},
 };
@@ -202,7 +221,7 @@ export default {
   color: #ffffff;
   background-color: #555555;
   height: 100vh;
-  /* margin-top: 60px; */
+
   nav {
     background-color: rgb(24, 24, 24);
     height: 75px;
@@ -234,29 +253,10 @@ export default {
     flex-wrap: wrap;
     width: 90%;
     margin: auto;
-    li {
-      list-style: none;
-      width: calc(100% / 5);
-      .thumbnail {
-        height: 513px;
-        object-fit: cover;
-      }
-      .overlay {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        top: 0;
-        bottom: 0;
-        opacity: 0;
-        padding: 60px;
-        background-color: rgba(0, 0, 0, 0.836);
-        transition: all 0.2s linear;
-      }
-      &:hover {
-        .overlay {
-          opacity: 1;
-        }
-      }
+    h1 {
+      margin-top: 50px;
+      width: 100%;
+      text-align: start;
     }
   }
 }
