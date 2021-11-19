@@ -1,10 +1,26 @@
 <template>
   <div id="app">
-    <input type="search" v-model="userInput" />
-    <button @click="movieCall(`movie`, `movies`), movieCall(`tv`, `series`)">
-      Search
-    </button>
+    <nav class="navbar">
+      <div>
+        <h1 class="fw-bold text-danger ps-3">BOOLFLIX</h1>
+      </div>
+      <div class="pe-3">
+        <input type="search" v-model="userInput" />
+        <button
+          @click="movieCall(`movie`, `movies`), movieCall(`tv`, `series`)"
+        >
+          Search
+        </button>
+      </div>
+    </nav>
+
     <div class="row">
+      <!-- <FilmCard
+        v-for="movie in movies"
+        :key="movie.id"
+        :data="movies"
+      ></FilmCard> -->
+      <h1 class="p-2 fw-bold" v-if="this.movies.length > 0">MOVIE</h1>
       <ul>
         <li v-for="movie in movies" :key="movie.id">
           <div class="lista_film pb-5">
@@ -16,21 +32,24 @@
             <div>
               <img :src="lang[movie.original_language]" width="30px" alt="" />
             </div>
-            <i
-              class="fa fa-star"
-              aria-hidden="true"
-              v-for="(star, i) in voteFunction(movie)"
-              :key="i"
-            ></i>
-            <i
-              class="fa fa-star-o"
-              aria-hidden="true"
-              v-for="(star, i) in starEmpty(movie)"
-              :key="i"
-            ></i>
+            <span
+              >Voto:<i
+                class="fa fa-star"
+                aria-hidden="true"
+                v-for="(star, i) in voteFunction(movie)"
+                :key="i"
+              ></i>
+              <i
+                class="fa fa-star-o"
+                aria-hidden="true"
+                v-for="(star, i) in starEmpty(movie)"
+                :key="i + 'stella-vuota'"
+              ></i>
+            </span>
           </div>
         </li>
       </ul>
+      <h1 class="p-2 fw-bold" v-if="this.series.length > 0">TV SERIES</h1>
       <ul>
         <li v-for="serie in series" :key="serie.id">
           <div class="lista_film pb-5">
@@ -47,13 +66,13 @@
                 class="fa fa-star"
                 aria-hidden="true"
                 v-for="(star, i) in voteFunction(serie)"
-                :key="i"
+                :key="i + 'stella-piena'"
               ></i>
               <i
                 class="fa fa-star-o"
                 aria-hidden="true"
                 v-for="(star, i) in starEmpty(serie)"
-                :key="i"
+                :key="i + 'stella_vuota'"
               ></i
             ></span>
           </div>
@@ -65,7 +84,8 @@
 
 <script>
 import axios from "axios";
-
+/* import FilmCard from "@/components/FilmCard.vue";
+ */
 export default {
   name: "App",
   components: {},
@@ -104,14 +124,14 @@ export default {
           this[objData] = resp.data.results;
         });
     },
-    thumbnailCall() {},
     flag(lang) {
       return this.lang[lang];
     },
     thumb(type) {
       let urlContent = "https://image.tmdb.org/t/p/";
       let idThumb = type.poster_path;
-      return urlContent + "w185" + idThumb;
+
+      return urlContent + "w342" + idThumb;
     },
     voteFunction(type) {
       let vote = type.vote_average / 2;
@@ -121,7 +141,7 @@ export default {
       return 5 - this.voteFunction(type);
     },
   },
-  mounted() {},
+  computed: {},
 };
 </script>
 
@@ -134,14 +154,37 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  color: #ffffff;
+  background-color: #555555;
+  height: 100vh;
+  /* margin-top: 60px; */
+  nav {
+    background-color: rgb(24, 24, 24);
+    height: 75px;
+  }
+  .row {
+    height: calc(100vh - 75px);
+    overflow: auto;
+    margin-right: 0;
+  }
   ul {
     list-style: none;
-    width: 50%;
+    display: flex;
+    flex-wrap: wrap;
+    width: 90%;
+    margin: auto;
     li {
       list-style: none;
+      width: calc(100% / 5);
     }
   }
 }
+
+/* *
+f
+*/
 </style>
+
+
+
+ 
