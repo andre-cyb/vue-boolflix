@@ -2,11 +2,22 @@
   <div id="app">
     <nav class="navbar">
       <div>
-        <h1 class="fw-bold text-danger ps-3">BOOLFLIX</h1>
+        <h1 class="fw-bold text-danger ps-3 m-0">BOOLFLIX</h1>
       </div>
-      <div class="pe-3">
-        <input type="search" v-model="userInput" />
+
+      <div class="input-group pe-3">
+        <input
+          class="form-control"
+          type="search"
+          v-model="userInput"
+          placeholder="Cerca un contenuto"
+          @keydown.enter="
+            movieCall(`movie`, `movies`), movieCall(`tv`, `series`)
+          "
+        />
         <button
+          type="button"
+          class="btn btn-danger text-white"
           @click="movieCall(`movie`, `movies`), movieCall(`tv`, `series`)"
         >
           Search
@@ -24,7 +35,7 @@
       <ul>
         <li v-for="movie in movies" :key="movie.id">
           <div class="lista_film pb-5">
-            <img :src="thumb(movie)" alt="" />
+            <img class="thumbnail" :src="thumb(movie)" alt="" />
             <h3>
               {{ movie.title }}
             </h3>
@@ -130,6 +141,10 @@ export default {
     thumb(type) {
       let urlContent = "https://image.tmdb.org/t/p/";
       let idThumb = type.poster_path;
+      if (!idThumb) {
+        urlContent = require("@/assets/no-image.png");
+        return urlContent;
+      }
 
       return urlContent + "w342" + idThumb;
     },
@@ -161,6 +176,22 @@ export default {
   nav {
     background-color: rgb(24, 24, 24);
     height: 75px;
+    .input-group {
+      width: auto;
+      input {
+        &:focus {
+          border-color: #dc3545;
+        }
+      }
+      .btn-danger {
+        box-shadow: none;
+      }
+      .btn {
+        &:focus {
+          box-shadow: none;
+        }
+      }
+    }
   }
   .row {
     height: calc(100vh - 75px);
@@ -176,6 +207,10 @@ export default {
     li {
       list-style: none;
       width: calc(100% / 5);
+      .thumbnail {
+        height: 513px;
+        object-fit: cover;
+      }
     }
   }
 }
